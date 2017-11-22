@@ -15,10 +15,41 @@ window.spinny = (function () {
         return results;
     };
 
-    Spinny.prototype.forEach(callback) {
+    Spinny.prototype.forEach = function (callback) {
         this.map(callback);
         return this;
     };
+
+    Spinny.prototype.mapOne = function (callback) {
+        var m = this.map(callback);
+        return m.length > 1 ? m : m[0];
+    };
+
+    Spinny.prototype.text = function (text) {
+        if (typeof text !== "undefined") {
+            return this.forEach(function (el) {
+                el.innerText = text;
+            });
+        } else {
+            return this.mapOne(function (el) {
+                return el.innerText;
+            });
+        }
+    };
+
+    Spinny.prototype.html = function (html) {
+        if (typeof html !== "undefined") {
+            this.forEach(function (el) {
+                el.innerHTML = html;
+            });
+            return this;
+        } else {
+            return this.mapOne(function (el) {
+                return el.innerHTML;
+            });
+        }
+    };
+
     var spinny = {
         get: function (selector) {
             var els;
@@ -29,6 +60,7 @@ window.spinny = (function () {
                 } else {
                     els = [selector];
                 }
+                console.log(els)
                 return new Spinny(els);
         }
     };
